@@ -1,0 +1,87 @@
+
+
+# define the target variables ...
+target								=	$(strip $(@))
+target-word-list					=	$(strip $(shell echo $(target) | tr - " " ))
+target-word-count					=	$(strip $(words $(target-word-list)))
+
+# the target action is always the first word...
+target-action						=	$(strip $(word 1, $(target-word-list)))
+# the target subject is always the second word ...
+target-subject						=	$(strip $(word 2, $(target-word-list)))
+# list of target prepositions ...
+target-prep-list					=	from to on in into
+# the preposition could occur in the 3rd or the 4th place....
+target-prep3						=	$(strip $(if	$(filter $(target-prep-list), $(word 3, $(target-word-list)))	\
+												, 		$(word 3, $(target-word-list))									\
+												,		))
+target-prep4						=	$(strip $(if	$(filter $(target-prep-list), $(word 4, $(target-word-list)))	\
+												, 		$(word 4, $(target-word-list))									\
+												,		))
+#  pick up the resulting preposition from either the 3rd or the 4th place...
+target-prep							=	$(strip $(if $(target-prep3),$(target-prep3),$(target-prep4)))
+# the target subject qualifier would occur in the 3rd place, if that is not a preposition ...
+target-subqual						=	$(strip $(if	$(target-prep3)													\
+												, 																		\
+												,		$(word 3, $(target-word-list)) ))
+# the target object could occur in the 4th or the 5 place ...
+target-object4						=	$(strip $(if	$(target-prep3)													\
+												, 		$(word 4, $(target-word-list))									\
+												,		))
+target-object5						=	$(strip $(if	$(target-prep4)													\
+												, 		$(word 5, $(target-word-list))									\
+												,		))
+# pick up the resulting object from either the 4th or the 5th place ...
+target-object						=	$(strip $(if $(target-object4),$(target-object4),$(target-object5)))
+# the object qualifier could occur in either the 5th or the 6th places ...
+target-obqual5						=	$(strip $(if	$(target-prep3)													\
+												, 		$(word 5, $(target-word-list))									\
+												,		))
+target-obqual6						=	$(strip $(if	$(target-prep4)													\
+												, 		$(word 6, $(target-word-list))									\
+												,		))
+# pick up the resulting object qualifier from either the 5th or the 6 place ...
+target-obqual						=	$(strip $(if $(target-obqual5),$(target-obqual5),$(target-obqual6)))
+
+# ------------------------------------------------------------------
+# functions to show taget variables ...
+show-target-variable-name			=	$(strip $(1))
+show-target-variable-value			=	$(strip $($(show-target-variable-name)))
+define show-target-variable
+	printf "%-30s = '%s'\\n" "$(show-target-variable-name)" '$(show-target-variable-value)'
+endef
+
+
+define show-target-variables
+	$(call show-target-variable, target)
+	$(call show-target-variable, target-word-list)
+	$(call show-target-variable, target-word-count)
+	$(call show-target-variable, target-action)
+	$(call show-target-variable, target-subject)
+	$(call show-target-variable, target-subqual)
+	$(call show-target-variable, target-prep3)
+	$(call show-target-variable, target-prep4)
+	$(call show-target-variable, target-prep)
+	$(call show-target-variable, target-object4)
+	$(call show-target-variable, target-object5)
+	$(call show-target-variable, target-object)
+	$(call show-target-variable, target-obqual5)
+	$(call show-target-variable, target-obqual6)
+	$(call show-target-variable, target-obqual)
+	echo
+endef
+
+
+
+# ------------------------------------------------------------------
+# test case targets  for the variables defined above ...
+action1 \
+		action1-subject1 			action1-subject1-from-object1			action1-subject1-from-object1-obqual1				\
+		action1-subject1-subqual1	action1-subject1-subqual1-from-object1	action1-subject1-subqual1-from-object1-obqual1 :
+	$(call show-target-variables)
+
+
+test1:	action1 																												\
+		action1-subject1 			action1-subject1-from-object1			action1-subject1-from-object1-obqual1				\
+		action1-subject1-subqual1	action1-subject1-subqual1-from-object1	action1-subject1-subqual1-from-object1-obqual1
+

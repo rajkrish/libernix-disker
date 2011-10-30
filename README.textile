@@ -1,0 +1,17 @@
+
+
+INTRODUCTION:
+The disker scripts help create and update partitions on a number of hard disks in an identical fashion, so that they would be easily configured as RAID arrays.
+
+USAGE:
+More help to follow later.
+
+
+LICENSE:
+	The code here is released under the BSD license.
+
+COPYRIGHT:
+	Copyright (c) Rajesh Krishnan (git at krishnan dot cc).  All Rights Reserved.
+
+WARRANTY:
+	The code here is released under no guarantee that it would work for anyone under any circumstances.  There shall be no expectation or claims of usefulness, merchantibility of fitness for any purpose.

@@ -1,0 +1,17 @@
+#!/usr/bin/gmake -srRf
+
+DEFAULT: help
+
+project-dir							=	$(shell dirname $(shell readlink -fn $(firstword $(MAKEFILE_LIST))))
+include									$(project-dir)/target.inc.gmake
+
+init-sd%:
+	sudo parted -s -l
+
+
+
+
+help:
+	echo "INFO:  Help text goes here"
+
+
